@@ -9,6 +9,7 @@ class Wallet(models.Model):
 
     def update_balance(self, by_amount):
         with transaction.atomic():
+            Wallet.objects.select_for_update().get(pk=self.pk)
             current_balance = self.balance
             future_balance = current_balance + by_amount
             # Validation to ensure the wallet balance never goes negative
